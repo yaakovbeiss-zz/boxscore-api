@@ -12,7 +12,7 @@
   },
   "scripts": {
     "launch-db": "mongod",
-    "watch": "nodemon --inspect \"./server.js\"",
+    "watch": "nodemon \"./server.js\"",
     "start": "concurrently --kill-others \"npm run launch-db\" \"npm run watch\""
   }
 }
