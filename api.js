@@ -21,23 +21,21 @@ const getBoxscoreFromDbAsync = (gameId) => new Promise(function(resolve, reject)
         .sort({created_at: -1})
         .exec(function(err, boxscore) {
             if (err) { reject(err) }
-            // console.log("Boxscore from db: ", boxscore)
             resolve(boxscore)
         })
 })
 
 const createBoxscoreAsync = (data) => new Promise(function(resolve, reject) {
+    console.log("Creating new boxscore")
     const boxscore = new Boxscore(data);
-    console.log("creating new boxscore with data: ", data)
     boxscore.save(function(err) {
         if (err) { console.log(err); }
-        console.log("successfully created boxscore: ", boxscore)
         resolve(boxscore)
     });
 });
 
 const updateBoxscoreAsync = (gameId, data) => new Promise(function(resolve, reject) {
-    console.log("updating new boxscore with data: ", data)
+    console.log("Updating boxscore")
     // find record by latest game, there should never be more than one
     // boxscore per gameId in db
     Boxscore.findOneAndUpdate({gameId: gameId}, {$set: data}, {new: true}, (err, boxscore) => {
@@ -60,7 +58,6 @@ const getLatestBoxscore = async function(gameId) {
         // set gameId in db for future queries
         rawFeed['gameId'] = gameId
         const newBoxScore = await createBoxscoreAsync(rawFeed)
-        console.log("newBoxScore: ", newBoxScore)
         return newBoxScore
     }
 
@@ -78,7 +75,6 @@ const getLatestBoxscore = async function(gameId) {
     if ((Date.now() - modifiedAtInMilliSeconds) > FIFTEEN_SECONDS) {
         let rawFeed = await fetcher(url)
         const updatedBoxscore = await updateBoxscoreAsync(gameId, rawFeed)
-        console.log("updatedBoxscore: ", updatedBoxscore)
         return updatedBoxscore
     }
 

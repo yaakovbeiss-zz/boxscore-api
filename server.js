@@ -31,17 +31,11 @@ const server = http.createServer((req, res) => {
               res.write(JSON.stringify(feed));
               res.end();
           })
-    } else if (url === "/reset") {
-        Boxscore.remove({}, function(){})
-        res.write(JSON.stringify("Reset db."));
-        res.end();
     } else {
         res.statusCode = 500
-        res.setHeader('Content-Type', 'text/html');
-        res.write('<h1>That feed does not exist.<h1>');
+        res.write('Error: That feed does not exist.');
         res.end();
     }
-
 
 });
 
